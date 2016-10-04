@@ -81,12 +81,47 @@ def depthFirstSearch(problem):
 
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
-
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
-    "*** YOUR CODE HERE ***"
+   
+    visited = []
+    visited.append(problem.getStartState())
+    allChildrenExapanded = []
+    track = util.Stack()
+    currentState = [problem.getStartState(),"null",0]
+    track.push(currentState)
+    ans = []
+    while (1):
+        succ = problem.getSuccessors(currentState[0])
+        count = 0 
+        for su in succ: 
+            if (su[0] not in visited):
+                currentState = su
+                track.push(currentState)
+                visited.append(currentState[0])
+                if(problem.isGoalState(currentState[0])):
+                    while (not track.isEmpty()):
+                        temp = track.pop()
+                        ans.append(temp[1])
+                    ans.reverse()
+                    ans.pop(0)  
+                    return ans
+                break
+            count = count + 1
+            allChildrenExapanded.append(currentState)
+        if(len(succ) == count):
+            while (1):
+                track.pop()
+                currentState = track.pop()
+                track.push(currentState)
+                if (currentState not in allChildrenExapanded):
+                    break
+    return ans    
+    
+                
+    
+    
+    
+        
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
