@@ -171,7 +171,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
          visited.append(position)
     return path
     util.raiseNotDefined()
-    util.raiseNotDefined()
+    
 
 
 # Abbreviations

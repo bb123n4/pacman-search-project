@@ -560,16 +560,16 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         xy1 = state
         foods = self.food.asList()
         minimum = 999999
-        index = 0
+        closetDot = 0 #
         for f in foods:
             xy2 = f
             manh = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
             if manh < minimum:
                 minimum = manh
-                index = f
+                closetDot = f
         # wherher the currentState is the closet dot or not
-        # If it is, then it is        
-        return state == index        
+        # If it is, then it is the goal state       
+        return state == closetDot        
                 
         
         util.raiseNotDefined()
