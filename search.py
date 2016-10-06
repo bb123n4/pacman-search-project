@@ -82,56 +82,65 @@ def depthFirstSearch(problem):
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
     """
-   
     visited = []
-    visited.append(problem.getStartState())
-    allChildrenExapanded = []
-    track = util.Stack()
-    currentState = [problem.getStartState(),"null",0]
-    track.push(currentState)
-    ans = []
-    while (1):
-        succ = problem.getSuccessors(currentState[0])
-        count = 0 
-        for su in succ: 
-            if (su[0] not in visited):
-                currentState = su
-                track.push(currentState)
-                visited.append(currentState[0])
-                if(problem.isGoalState(currentState[0])):
-                    while (not track.isEmpty()):
-                        temp = track.pop()
-                        ans.append(temp[1])
-                    ans.reverse()
-                    ans.pop(0)  
-                    return ans
-                break
-            count = count + 1
-            allChildrenExapanded.append(currentState)
-        if(len(succ) == count):
-            while (1):
-                track.pop()
-                currentState = track.pop()
-                track.push(currentState)
-                if (currentState not in allChildrenExapanded):
-                    break
-    return ans    
-    
-                
-    
-    
-    
-        
+    fringe = util.Stack() # in DFS, the fringe is a stack
+    position, path, cost = [problem.getStartState(),[],0]
+    #position is the current position
+    #path is the whole path from the start point to the current point
+    #cost is the toal cost from the start point to the current point
+    fringe.push([position, path, cost])
+    while (not fringe.isEmpty()):
+         position, path, cost = fringe.pop()
+         if (problem.isGoalState(position)):
+             break
+         if (position not in visited):   
+             for po,pa,co in problem.getSuccessors(position):
+                 if(po not in visited):
+                    fringe.push([po,path + [pa],cost + co])    
+         visited.append(position)                                    
+    return path
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
+    visited = []
+    fringe = util.Queue() # in BFS, the fringe is a queue
+    position, path, cost = [problem.getStartState(),[],0]
+    #position is the current position
+    #path is the whole path from the start point to the current point
+    #cost is the toal cost from the start point to the current point
+    fringe.push([position, path, cost])
+    while (not fringe.isEmpty()):
+         position, path, cost = fringe.pop()
+         if (problem.isGoalState(position)):
+             break
+         if (position not in visited):   
+             for po,pa,co in problem.getSuccessors(position):
+                 if(po not in visited):
+                    fringe.push([po,path + [pa],cost + co])    
+         visited.append(position)                                    
+    return path
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
+    visited = []
+    fringe = util.PriorityQueue() # in UCS, the fringe is a priority queue, the priority is defined by g(n)
+    position, path, cost = [problem.getStartState(),[],0]
+    #position is the current position
+    #path is the whole path from the start point to the current point,which is a list
+    #cost is the toal cost from the start point to the current point
+    fringe.update([position, path, cost],cost)
+    while (not fringe.isEmpty()):
+         position, path, cost = fringe.pop()
+         if (problem.isGoalState(position)):
+             break
+         if (position not in visited):   
+             for po,pa,co in problem.getSuccessors(position):
+                 if(po not in visited):
+                    fringe.update([po,path + [pa],cost + co],cost + co)
+         visited.append(position)
+    return path
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -144,6 +153,24 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    visited = []
+    fringe = util.PriorityQueue() # in A*, the fringe is a priority queue, the priority is defined by g(n) + h(n)
+    position, path, cost = [problem.getStartState(),[],0]
+    #position is the current position
+    #path is the whole path from the start point to the current point,which is a list
+    #cost is the toal cost from the start point to the current point
+    fringe.update([position, path, cost],cost+heuristic(position,problem))
+    while (not fringe.isEmpty()):
+         position, path, cost = fringe.pop()
+         if (problem.isGoalState(position)):
+             break
+         if (position not in visited):   
+             for po,pa,co in problem.getSuccessors(position):
+                 if(po not in visited):
+                    fringe.update([po,path + [pa],cost + co],cost + co + heuristic(po,problem))
+         visited.append(position)
+    return path
+    util.raiseNotDefined()
     util.raiseNotDefined()
 
 
